@@ -365,8 +365,8 @@ function main() {
   return Events({
     from_date: params.from_date,
     to_date: params.to_date,
-    event: 'Viewed report',
   })
+  .filter(function(event) { return event.name == "Viewed report" })
   .groupByUser(function(state, events) {
       state = state || {
         time: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
@@ -378,18 +378,20 @@ function main() {
       return state;
     })
   .reduce(function(accumulators, items) {
-      var result = [0];
       var i;
       var j;
-      for (i = 0;i < accumulators.length; i++) {
-        var accumulator = accumulators[i];
-        // for (j = 0; j < 24; j++) {
-          result[0] += accumulator.value.time[0];
-        //}
+      var result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,];
+      for (i = 0; i < accumulators.length; i++) {
+        for (j = 0; j < 24; j++) {
+          result[j] += accumulators[i][j];
+        }
       }
-      for (var i = 0; i < items.length; i++) {
-        var item = items[i];
-        result[0] += item.value.time[0];
+      for (i = 0; i < items.length; i++) {
+        var accumulated_count = 0;
+        for (j = 0; j < 24; j++) {
+          accumulated_count += items[i].value.time[j];
+          result[j] += accumulated_count;
+        }
       }
       return result;
   });
