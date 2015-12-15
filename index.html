@@ -379,9 +379,17 @@ function main() {
     })
   .reduce(function(accumulators, items) {
       var result = [0];
+      var i;
+      var j;
+      for (i = 0;i < accumulators.length; i++) {
+        var accumulator = accumulators[i];
+        // for (j = 0; j < 24; j++) {
+          result[0] += accumulator.value.time[0];
+        //}
+      }
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
-        result[0] += 1;
+        result[0] += item.value.time[0];
       }
       return result;
   });
