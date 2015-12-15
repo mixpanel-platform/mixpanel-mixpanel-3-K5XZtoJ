@@ -362,33 +362,29 @@ function mergeInPlace(d1, d2) {
 
 <script type="text/cq" id="getting_started_query">
 function main() {
-  // Take all events in the given date range.
   return Events({
     from_date: params.from_date,
     to_date: params.to_date,
+    event: 'Segmentation query',
   })
-  // Group them by user distinct_id, and call the provided function.
   .groupByUser(function(state, events) {
       state = state || {
-        last_day_active: new Date(0),
-        num_days_active: 0,
-        city: events[0]['$city'],
+        time: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
       };
       for (var i = 0; i < events.length; ++i) {
-        var event_time = new Date(events[i]['time']);
-        var event_day = new Date(event_time.getFullYear(),
-                                 event_time.getMonth(),
-                                 event_time.getDate());
-        if (event_day > state.last_day_active) {
-          ++state.num_days_active;
-          state.last_day_active = event_day;
-        }
+        var hour = new Date(events[i]['time']).getHours();
+        state.time[hour] = 1;
       }
       return state;
     })
-  // Only keep entries where num_days_active property is at least 5.
-  .filter(function(item) { return item.value.num_days_active >= 5; })
-  .groupBy([function(item){return item.value.city;}], mixpanel.reducer.count());
+  .reduce(function(accumulators, items) {
+      var result = [0];
+      for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        result[0] += item[0];
+      }
+      return result;
+  });
 }
 </script>
 
