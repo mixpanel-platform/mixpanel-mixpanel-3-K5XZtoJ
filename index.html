@@ -366,7 +366,7 @@ function main() {
     from_date: params.from_date,
     to_date: params.to_date,
   })
-  .filter(function(event) { return event.name == "Viewed report" })
+  .filter(function(event) { return event.name == "Viewed report" && new Date(event['time']) < new Date() })
   .groupByUser(function(state, events) {
       state = state || {
         time: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,],
@@ -396,7 +396,7 @@ function main() {
       return result;
   });
 }
-</script>
+`</script>
 
 <script type="text/cq" id="getting_started_params">
 {
