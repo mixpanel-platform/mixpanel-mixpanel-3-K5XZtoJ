@@ -365,7 +365,7 @@ function main() {
   return Events({
     from_date: params.from_date,
     to_date: params.to_date,
-    event: 'Segmentation query',
+    event: 'Viewed report',
   })
   .groupByUser(function(state, events) {
       state = state || {
@@ -377,11 +377,11 @@ function main() {
       }
       return state;
     })
-  .reduce(function(accumulators, items) {
+  .groupBy([event], function(accumulators, items) {
       var result = [0];
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
-        result[0] += item[0];
+        result[0] += 1;
       }
       return result;
   });
