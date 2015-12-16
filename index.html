@@ -366,7 +366,7 @@ function main() {
     from_date: params.from_date,
     to_date: params.to_date,
   })
-  .filter(function(event) { return event.name == "Viewed report" && new Date(event['time']) < new Date() })
+  .filter(function(event) { return event.name == "Viewed report" })
   .groupByUser(function(state, events) {
       state = state || {
         first_seen_at_time: 24,
