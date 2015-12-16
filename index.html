@@ -371,15 +371,16 @@ function main() {
       state = state || {
         first_seen_at_time: 24,
       };
-      for (var i = 0; i < events.length; ++i) {
+      for (var i = 0; i < events.length; i++) {
         var hour = new Date(events[i]['time']).getHours();
-        state.first_seen_at_time = state.first_seen_at_time < hour ? state.first_seen_at_time : hour;
+        state.first_seen_at_time = Math.min(state.first_seen_at_time, hour);
       }
       return state;
     })
   .reduce(function(accumulators, items) {
       var i, j;
-      var result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,];
+      var result = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+      var current_time = new Date().getHours();
       for (i = 0; i < accumulators.length; i++) {
         for (j = 0; j < 24; j++) {
           result[j] += accumulators[i][j];
@@ -393,7 +394,7 @@ function main() {
       return result;
   });
 }
-`</script>
+</script>
 
 <script type="text/cq" id="getting_started_params">
 {
